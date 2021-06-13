@@ -33,7 +33,7 @@ export default {
     const { isAuthenticated, user } = useAuth(auth);
     const salir = async () => {
       try {
-        await auth.signOut();
+        await auth.signOut;
       } catch (error) {
         console.log(error);
       }
