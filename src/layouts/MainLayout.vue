@@ -22,7 +22,7 @@
 
 <script>
 import { useAuth } from "@vueuse/firebase";
-import { auth } from "boot/firebase";
+import { auth,db } from "boot/firebase";
 
 export default {
   name: "MainLayout",
@@ -33,7 +33,13 @@ export default {
     const { isAuthenticated, user } = useAuth(auth);
     const salir = async () => {
       try {
-        await auth.signOut;
+          await db.collection('usuarios').doc(user.value. uid).update({
+                      
+                       estado : false,
+             
+                   })
+        await auth.signOut();
+      
       } catch (error) {
         console.log(error);
       }

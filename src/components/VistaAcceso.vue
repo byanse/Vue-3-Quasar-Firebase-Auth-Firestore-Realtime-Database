@@ -40,12 +40,12 @@
 
 <script>
 import {ref} from 'vue'
-import {auth} from 'boot/firebase'
+import {auth,db} from 'boot/firebase'
 import {useAuth} from '@vueuse/firebase'
 export default {
     setup(){
-        const email = ref('')
-        const password = ref('')
+        const email = ref('prueba@prueba.com')
+        const password = ref('123456')
         const acceder = ref(true)
 
         const {isAuthenticated,user} = useAuth(auth)
@@ -58,12 +58,23 @@ export default {
             try {
                 if(!acceder.value){
                     //registrar
-                   const usuario = await auth.createUserWithEmailAndPassword(email.value, password.value)
+                   const usuario = await auth.createUserWithEmailAndPassword(email.value, password.value);
+
+                   await db.collection('usuarios').doc(usuario.user.uid).set({
+                       email: usuario.user.email,
+                       estado : true,
+                       uid: usuario.user.uid
+                   })
                    console.log(usuario.user)
                 }else{
                     
                     //login
-                    const usuario = await auth.signInWithEmailAndPassword(email.value, password.value)
+                    const usuario = await auth.signInWithEmailAndPassword(email.value, password.value); 
+                      await db.collection('usuarios').doc(usuario.user.uid).update({
+                      
+                       estado : true,
+             
+                   })
                     console.log(usuario.user)
                 }
                 
